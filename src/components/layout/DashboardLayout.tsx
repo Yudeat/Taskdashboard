@@ -17,6 +17,7 @@ import { LayoutDashboard, ListTodo, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { useDispatch } from 'react-redux';
 import { logout } from '@/features/auth/authSlice';
+import { clearAuthCookie } from '@/lib/auth-cookies';
 
 const navItems = [
   { title: 'Dashboard', url: '/', icon: LayoutDashboard },
@@ -44,7 +45,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                   </SidebarMenuItem>
                 ))}
                 <SidebarMenuItem>
-                  <SidebarMenuButton onClick={() => dispatch(logout())}>
+                  <SidebarMenuButton onClick={() => { clearAuthCookie(); dispatch(logout()); }}>
                     <LogOut />
                     <span>Logout</span>
                   </SidebarMenuButton>
