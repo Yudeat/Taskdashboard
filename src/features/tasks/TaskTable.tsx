@@ -1,7 +1,11 @@
 'use client';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Task } from '@/types';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Table, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { TaskActions } from './TaskActions';
+import { rowVariants, staggerContainer } from '@/lib/animations';
+
+const MotionTableRow = motion.create(TableRow);
 
 interface TaskTableProps {
   tasks: Task[];
@@ -23,18 +27,25 @@ export function TaskTable({ tasks, onEdit }: TaskTableProps) {
           <TableHead>Actions</TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody>
-        {tasks.map((task) => (
-          <TableRow key={task.id}>
-            <TableCell className="font-medium">{task.title}</TableCell>
-            <TableCell className="text-zinc-500">{task.description}</TableCell>
-            <TableCell className="capitalize">{task.status}</TableCell>
-            <TableCell className="capitalize">{task.priority}</TableCell>
-            <TableCell>{new Date(task.dueDate).toLocaleDateString()}</TableCell>
-            <TableCell><TaskActions task={task} onEdit={onEdit} /></TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
+      <motion.tbody variants={staggerContainer} initial="hidden" animate="show">
+        <AnimatePresence mode="popLayout">
+          {tasks.map((task) => (
+            <MotionTableRow
+              key={task.id}
+              variants={rowVariants}
+              exit="exit"
+              layout
+            >
+              <TableCell className="font-medium">{task.title}</TableCell>
+              <TableCell className="text-zinc-500">{task.description}</TableCell>
+              <TableCell className="capitalize">{task.status}</TableCell>
+              <TableCell className="capitalize">{task.priority}</TableCell>
+              <TableCell>{new Date(task.dueDate).toLocaleDateString()}</TableCell>
+              <TableCell><TaskActions task={task} onEdit={onEdit} /></TableCell>
+            </MotionTableRow>
+          ))}
+        </AnimatePresence>
+      </motion.tbody>
     </Table>
   );
 }

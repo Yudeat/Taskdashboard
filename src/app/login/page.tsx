@@ -1,4 +1,5 @@
 'use client';
+import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useDispatch } from 'react-redux';
@@ -26,6 +27,11 @@ export default function LoginPage() {
 
   return (
     <div className="flex h-screen items-center justify-center bg-zinc-50 dark:bg-zinc-950">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 12 }}
+        animate={{ opacity: 1, scale: 1,    y: 0  }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+      >
       <Card className="w-[350px]">
         <CardHeader>
           <CardTitle>Task Dashboard</CardTitle>
@@ -44,6 +50,7 @@ export default function LoginPage() {
           </form>
         </CardContent>
       </Card>
+      </motion.div>
     </div>
   );
 }
