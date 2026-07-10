@@ -1,5 +1,6 @@
 'use client';
 import { AnimatePresence, motion } from 'framer-motion';
+import Link from 'next/link';
 import { Task } from '@/types';
 import { Table, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { TaskActions } from './TaskActions';
@@ -36,7 +37,11 @@ export function TaskTable({ tasks, onEdit }: TaskTableProps) {
               exit="exit"
               layout
             >
-              <TableCell className="font-medium">{task.title}</TableCell>
+              <TableCell className="font-medium">
+                <Link href={`/tasks/${task.id}`} className="hover:underline">
+                  {task.title}
+                </Link>
+              </TableCell>
               <TableCell className="text-zinc-500">{task.description}</TableCell>
               <TableCell className="capitalize">{task.status}</TableCell>
               <TableCell className="capitalize">{task.priority}</TableCell>
