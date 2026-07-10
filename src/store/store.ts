@@ -8,9 +8,7 @@ const persistConfig = {
   key: 'root',
   storage,
   version: 1,
-  whitelist: ['auth'], 
-  blacklist: ['tasksAp.reducerPath'],
-
+  whitelist: ['auth'],
 };
 
 const rootReducer = combineReducers({
