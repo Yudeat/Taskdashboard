@@ -1,8 +1,10 @@
 'use client';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
+import { ClipboardList } from 'lucide-react';
 import { Task } from '@/types';
 import { Table, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { EmptyState } from '@/components/common/EmptyState';
 import { TaskActions } from './TaskActions';
 import { rowVariants, staggerContainer } from '@/lib/animations';
 
@@ -14,7 +16,13 @@ interface TaskTableProps {
 }
 
 export function TaskTable({ tasks, onEdit }: TaskTableProps) {
-  if (tasks.length === 0) return <p className="text-zinc-500 py-4">No tasks yet.</p>;
+  if (tasks.length === 0) return (
+    <EmptyState
+      icon={ClipboardList}
+      title="No tasks found"
+      description="Try adjusting your filters or create a new task."
+    />
+  );
 
   return (
     <Table>
@@ -36,6 +44,7 @@ export function TaskTable({ tasks, onEdit }: TaskTableProps) {
               variants={rowVariants}
               exit="exit"
               layout
+              whileHover={{ backgroundColor: 'rgba(0,0,0,0.02)', transition: { duration: 0.1 } }}
             >
               <TableCell className="font-medium">
                 <Link href={`/tasks/${task.id}`} className="hover:underline">

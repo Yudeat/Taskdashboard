@@ -1,7 +1,9 @@
 'use client';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setSearch, setStatusFilter, setPriorityFilter, setSortOrder } from '@/features/ui/uiSlice';
+import { useDebounce } from '@/hooks/useDebounce';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
@@ -9,12 +11,19 @@ export function TaskFilters() {
   const dispatch = useDispatch();
   const { searchQuery, statusFilter, priorityFilter, sortOrder } = useSelector((state: RootState) => state.ui);
 
+  const [inputValue, setInputValue] = useState(searchQuery);
+  const debouncedSearch = useDebounce(inputValue, 300);
+
+  useEffect(() => {
+    dispatch(setSearch(debouncedSearch));
+  }, [debouncedSearch, dispatch]);
+
   return (
     <div className="flex flex-wrap gap-3 mb-6">
       <Input
         placeholder="Search tasks..."
-        value={searchQuery}
-        onChange={(e) => dispatch(setSearch(e.target.value))}
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
         className="max-w-xs"
       />
       <Select value={statusFilter} onValueChange={(v) => dispatch(setStatusFilter(v as typeof statusFilter))}>

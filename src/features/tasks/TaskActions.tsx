@@ -1,6 +1,7 @@
 'use client';
 import { Task } from '@/types';
 import { Button } from '@/components/ui/button';
+import { ConfirmDialog } from '@/components/common/ConfirmDialog';
 import { useDeleteTaskMutation } from '@/services/tasksApi';
 
 interface TaskActionsProps {
@@ -14,7 +15,12 @@ export function TaskActions({ task, onEdit }: TaskActionsProps) {
   return (
     <div className="flex gap-2">
       <Button size="sm" variant="outline" onClick={() => onEdit(task)}>Edit</Button>
-      <Button size="sm" variant="destructive" onClick={() => deleteTask(task.id)}>Delete</Button>
+      <ConfirmDialog
+        trigger={<Button size="sm" variant="destructive">Delete</Button>}
+        title="Delete task?"
+        description={`"${task.title}" will be permanently removed.`}
+        onConfirm={() => deleteTask(task.id)}
+      />
     </div>
   );
 }

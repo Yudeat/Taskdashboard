@@ -5,6 +5,7 @@ interface UIState {
   statusFilter: 'all' | 'pending' | 'in-progress' | 'completed';
   priorityFilter: 'all' | 'low' | 'medium' | 'high';
   sortOrder: 'asc' | 'desc';
+  selectedTaskId: string | null;
 }
 
 const initialState: UIState = {
@@ -12,6 +13,7 @@ const initialState: UIState = {
   statusFilter: 'all',
   priorityFilter: 'all',
   sortOrder: 'asc',
+  selectedTaskId: null,
 };
 
 const uiSlice = createSlice({
@@ -27,11 +29,14 @@ const uiSlice = createSlice({
     setPriorityFilter: (state, action: PayloadAction<UIState['priorityFilter']>) => { 
       state.priorityFilter = action.payload; 
     },
-    setSortOrder: (state, action: PayloadAction<UIState['sortOrder']>) => { 
-      state.sortOrder = action.payload; 
+    setSortOrder: (state, action: PayloadAction<UIState['sortOrder']>) => {
+      state.sortOrder = action.payload;
+    },
+    setSelectedTaskId: (state, action: PayloadAction<string | null>) => {
+      state.selectedTaskId = action.payload;
     },
   },
 });
 
-export const { setSearch, setStatusFilter, setPriorityFilter, setSortOrder } = uiSlice.actions;
+export const { setSearch, setStatusFilter, setPriorityFilter, setSortOrder, setSelectedTaskId } = uiSlice.actions;
 export default uiSlice.reducer;

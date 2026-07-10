@@ -1,9 +1,11 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Pencil, Trash2 } from 'lucide-react';
 import { useGetTasksQuery, useUpdateTaskMutation, useDeleteTaskMutation } from '@/services/tasksApi';
+import { setSelectedTaskId } from '@/features/ui/uiSlice';
 import { Task } from '@/types';
 import { fadeUp } from '@/lib/animations';
 import { Button } from '@/components/ui/button';
@@ -11,6 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { TaskForm } from './TaskForm';
+import { ConfirmDialog } from '@/components/common/ConfirmDialog';
 
 const statusColor: Record<Task['status'], string> = {
   'pending':     'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
@@ -35,10 +38,16 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 export function TaskDetailPage({ id }: { id: string }) {
   const router = useRouter();
+  const dispatch = useDispatch();
   const { data: tasks = [], isLoading } = useGetTasksQuery();
   const [updateTask] = useUpdateTaskMutation();
   const [deleteTask] = useDeleteTaskMutation();
   const [editOpen, setEditOpen] = useState(false);
+
+  useEffect(() => {
+    dispatch(setSelectedTaskId(id));
+    return () => { dispatch(setSelectedTaskId(null)); };
+  }, [id, dispatch]);
 
   if (isLoading) {
     return (
@@ -90,9 +99,16 @@ export function TaskDetailPage({ id }: { id: string }) {
             <Button size="sm" variant="outline" onClick={() => setEditOpen(true)}>
               <Pencil className="h-3.5 w-3.5 mr-1" /> Edit
             </Button>
-            <Button size="sm" variant="destructive" onClick={handleDelete}>
-              <Trash2 className="h-3.5 w-3.5 mr-1" /> Delete
-            </Button>
+            <ConfirmDialog
+              trigger={
+                <Button size="sm" variant="destructive">
+                  <Trash2 className="h-3.5 w-3.5 mr-1" /> Delete
+                </Button>
+              }
+              title="Delete task?"
+              description={`"${task.title}" will be permanently removed.`}
+              onConfirm={handleDelete}
+            />
           </div>
         </div>
 
