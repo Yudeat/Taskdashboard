@@ -52,7 +52,7 @@ src/
 
 ## Libraries Used
 
-Next.js 16 with the App Router for routing and API routes.
+Next.js 16 with the App Router(Page router) for routing and API routes.
 
   Redux Toolkit for auth state, UI state (filters, search, selected task), and RTK Query for all API calls. Redux Persist keeps the auth session and filter preferences across refreshes. The API cache is intentionally not persisted.
 
