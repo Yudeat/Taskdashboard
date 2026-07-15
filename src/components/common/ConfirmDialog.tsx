@@ -19,8 +19,8 @@ interface ConfirmDialogProps {
 
 export function ConfirmDialog({
   trigger,
-  title = 'Are you sure?',
-  description = 'This action cannot be undone.',
+  title = 'Are you sure you want to delete this item?',
+  description = 'This action cannot be undone and will permanently remove the item from the system.',
   onConfirm,
 }: ConfirmDialogProps) {
   return (
